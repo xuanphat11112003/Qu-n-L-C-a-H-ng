@@ -40,11 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'QuanLyCuaHangSet.apps.Configs'
+    'QuanLyCuaHangSet.apps.QuanLyCuaHangSetConfig',
 ]
 
 AUTH_USER_MODEL = 'QuanLyCuaHangSet.User'
-MEDIA_ROOT = '%S/QuanLyCuaHangSet/static/' %BASE_DIR
+MEDIA_ROOT = '%s/QuanLyCuaHangSet/static/' %BASE_DIR
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
