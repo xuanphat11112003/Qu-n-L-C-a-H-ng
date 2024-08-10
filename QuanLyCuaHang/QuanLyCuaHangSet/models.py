@@ -19,6 +19,7 @@ class User(AbstractUser):
     nam_sinh = models.DateField(null=True, blank=True)
     thanh_vien = models.BooleanField(default=False)
     dia_chi = models.TextField()
+    user_role = models.TextField();
 
     def __str__(self):
         return self.username
@@ -51,7 +52,7 @@ class NhanVien_QL(models.Model):
 
 # Mô hình phiếu chi đổi thành Tích Điểm Voucher
 class TichDiemVoucher(BaseModel):
-    ma_voucher = models.AutoField(primary_key=True)
+
     ngay_lap = models.DateField()
     diem = models.IntegerField()
     tong_tien = models.DecimalField(max_digits=10, decimal_places=2)
@@ -64,7 +65,7 @@ class TichDiemVoucher(BaseModel):
 
 # Mô hình hóa đơn
 class HoaDon(BaseModel):
-    ma_hd = models.AutoField(primary_key=True)
+
     ngay_lap = models.DateField()
     tong_tien = models.DecimalField(max_digits=10, decimal_places=2)
     ghi_chu = models.TextField(blank=True)
@@ -72,11 +73,11 @@ class HoaDon(BaseModel):
     nhan_vien = models.ForeignKey(NhanVien, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Hóa đơn {self.ma_hd} - {self.ngay_lap}"
+        return f"Hóa đơn {self.id} - {self.ngay_lap}"
 
 # Mô hình sản phẩm
 class SanPham(BaseModel):
-    ma_sp = models.AutoField(primary_key=True)
+
     hinh_anh = models.ImageField(upload_to='QuanLySanPhamSet/%Y/%m')
     ten_sp = models.CharField(max_length=255)
     loai = models.CharField(max_length=100)
@@ -88,7 +89,7 @@ class SanPham(BaseModel):
 
 # Mô hình kho hàng
 class KhoHang(BaseModel):
-    ma_kho = models.AutoField(primary_key=True)
+
     ten_kho = models.CharField(max_length=255)
     so_luong_sp = models.IntegerField()
     trang_thai = models.CharField(max_length=50)

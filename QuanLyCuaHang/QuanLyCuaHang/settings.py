@@ -40,11 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'QuanLyCuaHangSet.apps.Configs'
+    'QuanLyCuaHangSet.apps.QuanLyCuaHangSetConfig',
+    'rest_framework',
+    'oauth2_provider',
 ]
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
 
 AUTH_USER_MODEL = 'QuanLyCuaHangSet.User'
-MEDIA_ROOT = '%S/QuanLyCuaHangSet/static/' %BASE_DIR
+MEDIA_ROOT = '%s/QuanLyCuaHangSet/static/' %BASE_DIR
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -134,3 +142,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#clien_id="fMuwNy8e0Sftnb3QfdYzTT69WRccGkQQ3G0gZCdN"
+#seret_key="HhvklAIzJ8sgM0xTdg96QEN1sFIlNTwZ5OyXBfo4LXRbjMPfK9va6t6Js5oTuLFrjJzhlVbGUQ9zNk2y8RgRt9cqCwGjriFDdLQ2dk7DohSBHh5hQ6PhCFirfSCGlp2Fpython "
