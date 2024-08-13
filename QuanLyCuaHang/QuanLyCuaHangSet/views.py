@@ -1,9 +1,14 @@
-from django.contrib.admin import action
+from rest_framework.decorators import action
+
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
 from django.shortcuts import render
 
-from QuanLyCuaHang.QuanLyCuaHangSet.models import User
-from QuanLyCuaHang.QuanLyCuaHangSet.serializer import UserSerializer
+from QuanLyCuaHangSet.models import *
+from QuanLyCuaHangSet.serializer import *
 from rest_framework import permissions, viewsets, generics, status, parsers
+
+from QuanLyCuaHangSet.models import HoaDon
 
 
 # Create your views here.
@@ -28,3 +33,15 @@ class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
             user.save()
 
         return Response(UserSerializer(user).data)
+
+class statisticViewSet(viewsets.ViewSet):
+    queryset = HoaDon.objects.all()
+    serializer_class = HoaDonSerializer
+
+    def get_queryset(self, request):
+        queryset = self.queryset
+        month = self.request.query_params.get('month')
+        year = self.request.query_params.get('year')
+        queryset = queryset.annotate(month=TruncMonth('ngay_lap')).values('month').annotate(total_revenue=Sum('tong_tien')).order_by('month')
+        return queryset
+

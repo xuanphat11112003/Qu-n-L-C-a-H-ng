@@ -7,7 +7,6 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-    id = models.AutoField(primary_key=True)
     created_date = models.DateField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)
     active = models.BooleanField(default=True)

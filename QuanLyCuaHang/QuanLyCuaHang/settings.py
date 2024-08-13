@@ -41,11 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'QuanLyCuaHangSet.apps.QuanLyCuaHangSetConfig',
-<<<<<<< HEAD
     'rest_framework',
     'oauth2_provider',
-=======
->>>>>>> d7db2d3e494f7ea4c601267d58940a46e076f44f
 ]
 REST_FRAMEWORK = {
 
@@ -96,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'qlchdb',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': 'chithien26@',
         'HOST': 'localhost'
     }
 }

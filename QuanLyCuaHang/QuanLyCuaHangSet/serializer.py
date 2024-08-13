@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
-from QuanLyCuaHang.QuanLyCuaHangSet.models import User, KhachHang
-
+from QuanLyCuaHangSet.models import *
 
 class UserSerializer(ModelSerializer):
 
@@ -24,3 +23,8 @@ class UserSerializer(ModelSerializer):
                 'write_only': 'true'
             }
         }
+
+class HoaDonSerializer(ModelSerializer):
+    class Meta:
+        model = HoaDon
+        fields = "__all__"
