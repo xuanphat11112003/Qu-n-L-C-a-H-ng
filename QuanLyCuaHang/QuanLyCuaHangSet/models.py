@@ -65,7 +65,7 @@ class TichDiemVoucher(BaseModel):
 # Mô hình hóa đơn
 class HoaDon(BaseModel):
 
-    ngay_lap = models.DateField()
+    ngay_lap = models.DateTimeField(auto_now_add=True)
     tong_tien = models.DecimalField(max_digits=10, decimal_places=2)
     ghi_chu = models.TextField(blank=True)
     khach_hang = models.ForeignKey(KhachHang, on_delete=models.CASCADE)
