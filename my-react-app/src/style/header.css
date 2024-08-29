@@ -1,0 +1,21 @@
+.custom-navbar {
+    background: linear-gradient(45deg, #87f5ef, #77c0f0); /* Màu gradient từ hồng đến cam */
+  }
+  
+  .custom-navbar .nav-link {
+    color: rgb(0, 0, 0); /* Màu văn bản của liên kết */
+  }
+  
+  .custom-navbar .nav-link:hover {
+    color: #fff; /* Màu văn bản khi hover */
+  }
+  
+  .custom-navbar .btn-danger {
+    background-color: #dc3545; /* Màu nền của nút Đăng xuất */
+    border: none;
+  }
+  
+  .custom-navbar .btn-danger:hover {
+    background-color: #c82333; /* Màu nền của nút khi hover */
+  }
+  

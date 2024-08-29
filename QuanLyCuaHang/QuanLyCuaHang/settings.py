@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-hb(b#mo*5fl0i6u!-s-076w(^n2f)sy2e-ugl*g@x1v6vt*wcl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.0.100']
 
 
 # Application definition
@@ -43,12 +43,14 @@ INSTALLED_APPS = [
     'QuanLyCuaHangSet.apps.QuanLyCuaHangSetConfig',
     'rest_framework',
     'oauth2_provider',
-    'drf_yasg'
+    'drf_yasg',
+    'corsheaders'
 ]
 REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+
     )
 }
 
@@ -63,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'QuanLyCuaHang.urls'
@@ -84,7 +88,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'QuanLyCuaHang.wsgi.application'
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://192.168.0.100:8000",
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
