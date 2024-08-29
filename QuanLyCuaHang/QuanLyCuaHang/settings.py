@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'QuanLyCuaHangSet.apps.QuanLyCuaHangSetConfig',
     'rest_framework',
     'oauth2_provider',
+    'drf_yasg'
 ]
 REST_FRAMEWORK = {
 
@@ -93,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'qlchdb',
         'USER': 'root',
-        'PASSWORD': 'chithien26@',
+        'PASSWORD': '123456',
         'HOST': 'localhost'
     }
 }

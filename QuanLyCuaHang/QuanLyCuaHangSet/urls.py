@@ -1,12 +1,12 @@
 from django.urls import path,include
-from . import views
-
-
+from QuanLyCuaHangSet import views
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('survey', views.statisticViewSet, basename='statistic')
+router.register('users', views.UserViewSet, basename='user')
+router.register('statistic', views.statisticViewSet, basename='statistic')
+router.register('hoadon', views.HoaDonViewSet, basename='hoadon')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
