@@ -27,8 +27,8 @@ SECRET_KEY = 'django-insecure-hb(b#mo*5fl0i6u!-s-076w(^n2f)sy2e-ugl*g@x1v6vt*wcl
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+ALLOWED_HOSTS = []  # '192.168.1.16','127.0.0.1'
 
-ALLOWED_HOSTS = ['192.168.1.16','127.0.0.1']
 
 
 # Application definition
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'oauth2_provider',
     'drf_yasg',
-    'corsheaders'
+    # 'corsheaders'
 ]
 REST_FRAMEWORK = {
 
@@ -101,7 +101,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'qlchdb',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': 'chithien26@',
         'HOST': 'localhost'
     }
 }

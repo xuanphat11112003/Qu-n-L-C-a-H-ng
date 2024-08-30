@@ -117,3 +117,9 @@ class HoaDon_SP(BaseModel):
 
     def __str__(self):
         return f"Hóa đơn {self.hoa_don.ma_hd} - Sản phẩm {self.san_pham.ten_sp}"
+
+
+class Comment(BaseModel):
+    content = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(SanPham, on_delete=models.CASCADE)

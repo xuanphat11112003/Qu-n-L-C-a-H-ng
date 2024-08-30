@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, KhachHang, NhanVien, NhanVien_QL, TichDiemVoucher, HoaDon, SanPham, KhoHang, DanhGiaOfKhachHang, HoaDon_SP
+from .models import *
 
 # Cấu hình hiển thị thông tin người dùng trong trang admin
 admin.site.site_header = "Quản lý cửa hàng"
@@ -81,3 +81,7 @@ class HoaDonSPAdmin(admin.ModelAdmin):
     list_display = ('hoa_don', 'san_pham', 'so_luong')
     search_fields = ('hoa_don__id', 'san_pham__ten_sp')
     list_filter = ('hoa_don__ngay_lap',)
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('content', 'created_date', 'user')

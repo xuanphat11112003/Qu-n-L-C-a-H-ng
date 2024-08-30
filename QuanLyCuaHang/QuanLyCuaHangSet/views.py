@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
-from .models import HoaDon, KhachHang, NhanVien, SanPham, HoaDon_SP, User, TichDiemVoucher
-from .serializer import HoaDonSerializer, UserSerializer, SanPhamSerializer, HoaDonSPSerializer
+from .models import *
+from .serializer import *
 
 
 class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
@@ -114,3 +114,27 @@ class StatisticViewSet(viewsets.ViewSet):
 class SanPhamViewSet(viewsets.ModelViewSet):
     queryset = SanPham.objects.filter(active=True)
     serializer_class = SanPhamSerializer
+
+    @action(methods=['get'], url_path='comments', detail=True)
+    def show_comments(self, request, pk):
+        queryset = self.queryset
+        product = SanPham.objects.get(pk=pk)
+        if self.action.__eq__('list'):
+            queryset = queryset.filter(product=product)
+        return queryset
+
+    @action(methods=['post'], url_path='add_comment', detail=True)
+    def add_comment(self, request, pk):
+        queryset = self.queryset
+        user = self.request.user
+        product = SanPham.objects.get(pk=pk)
+        content = request.data.get("content")
+
+        c = Comment.objects.create(content=content, user=user, product=product)
+        return Response(CommentSerializer(c).data, status=status.HTTP_201_CREATED)
+
+
+class CommentViewSet(viewsets.ViewSet, generics.DestroyAPIView, generics.UpdateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
