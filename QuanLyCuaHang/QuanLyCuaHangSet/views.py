@@ -10,13 +10,10 @@ from rest_framework import permissions, viewsets, generics, status, parsers
 
 from QuanLyCuaHangSet.models import HoaDon
 from . import serializer
-
+from rest_framework.response import Response
 
 # Create your views here.
 
-
-class Response:
-    pass
 
 
 class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):

@@ -7,7 +7,6 @@ import APIs, { endpoints } from "../configs/APIs";
 const Register = () => {
     const [user, setUser] = useState({});
     const [err, setErr] = useState();
-    const avatar = useRef();
     const nav = useNavigate();
 
     const register = async (e) => {
@@ -19,11 +18,7 @@ const Register = () => {
             let form = new FormData();
             for (let key in user)
                 if (key !== 'confirm')
-                    form.append(key, user[key]);
-
-            if (avatar.current.files.length > 0)
-                form.append("avatar",avatar.current.files[0]);
-
+                    form.append(key, user[key]);        
             let res = await APIs.post(endpoints['register'], form, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -73,11 +68,7 @@ const Register = () => {
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput7">
                     <Form.Label>Xác nhận mật khẩu</Form.Label>
                     <Form.Control type="password" placeholder="Xác nhận mật khẩu..." value={user.confirm} onChange={e => change(e, "confirm")}  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput8">
-                    <Form.Label>Ảnh đại diện</Form.Label>
-                    <Form.Control type="file" accept=".png,.jpg" ref={avatar}  />
-                </Form.Group>
+                </Form.Group>       
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput9">
                     <Button type="submit" variant="info">Đăng ký</Button>
                 </Form.Group>

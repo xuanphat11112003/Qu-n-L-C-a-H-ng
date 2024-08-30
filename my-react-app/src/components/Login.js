@@ -59,8 +59,6 @@ const Login =() =>{
             console.error("Error:", error.response ? error.response.data : error.message);
         }
     }
-   
-   
     return(
         <>
         <div
