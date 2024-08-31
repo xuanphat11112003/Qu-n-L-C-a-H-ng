@@ -13,6 +13,7 @@ import { createContext, useReducer } from 'react';
 import MyUserReducer from './reducers/MyUserReducer';
 
 import Register from './components/Register';
+import ChiTietSanPham from './components/ChiTietSanPham';
 
 
 
@@ -78,7 +79,7 @@ const App = () =>{
                 <Route path='/login' element={<Login/>} />
               
                 <Route path='/register' element={<Register/>} />
-              
+                <Route path="/sanpham/chitietsanpham" element={<ChiTietSanPham />} />
               </Routes>
             </Container>
             <Footer/>

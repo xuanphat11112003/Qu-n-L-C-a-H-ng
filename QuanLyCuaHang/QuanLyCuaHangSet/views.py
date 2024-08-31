@@ -12,7 +12,11 @@ from .serializer import *
 class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    def get_permissions(self):
+        if self.action in ['get_current_user']:
+            return [permissions.IsAuthenticated()]
+
+        return [permissions.AllowAny()]
 
     @action(methods=['get', 'patch'], url_path='current-user', detail=False)
     def get_current_user(self, request):
@@ -116,23 +120,35 @@ class SanPhamViewSet(viewsets.ModelViewSet):
     serializer_class = SanPhamSerializer
 
     @action(methods=['get'], url_path='comments', detail=True)
-    def show_comments(self, request, pk):
-        queryset = self.queryset
-        product = SanPham.objects.get(pk=pk)
-        if self.action.__eq__('list'):
-            queryset = queryset.filter(product=product)
-        return queryset
+    def show_comments(self, request, pk=None):
+        # Lấy sản phẩm dựa trên pk
+        product = self.get_object()
+
+        # Lấy các bình luận liên quan đến sản phẩm
+        comments = Comment.objects.filter(product=product)
+
+        # Serialize dữ liệu bình luận
+        serializer = CommentSerializer(comments, many=True)
+
+        # Trả về phản hồi
+        return Response(serializer.data)
 
     @action(methods=['post'], url_path='add_comment', detail=True)
-    def add_comment(self, request, pk):
-        queryset = self.queryset
-        user = self.request.user
-        product = SanPham.objects.get(pk=pk)
+    def add_comment(self, request, pk=None):
+        user = request.user
+        product = self.get_object()
         content = request.data.get("content")
 
-        c = Comment.objects.create(content=content, user=user, product=product)
-        return Response(CommentSerializer(c).data, status=status.HTTP_201_CREATED)
+        if not user.is_authenticated:
+            return Response({"detail": "Authentication credentials were not provided."},
+                            status=status.HTTP_403_FORBIDDEN)
 
+        if not content:
+            return Response({"detail": "Content is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        comment = Comment.objects.create(content=content, user=user, product=product)
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class CommentViewSet(viewsets.ViewSet, generics.DestroyAPIView, generics.UpdateAPIView):
     queryset = Comment.objects.all()

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-hb(b#mo*5fl0i6u!-s-076w(^n2f)sy2e-ugl*g@x1v6vt*wcl
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = []  # '192.168.1.16','127.0.0.1'
+ALLOWED_HOSTS = ['192.168.2.8']  # '192.168.1.16','127.0.0.1'
 
 
 
@@ -90,7 +90,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'QuanLyCuaHang.wsgi.application'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://192.168.0.100:8000",
+    "http://192.168.2.8:8000",
 ]
 
 # Database
@@ -101,7 +101,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'qlchdb',
         'USER': 'root',
-        'PASSWORD': 'chithien26@',
+        'PASSWORD': '123456',
         'HOST': 'localhost'
     }
 }
@@ -153,3 +153,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #clien_id="fMuwNy8e0Sftnb3QfdYzTT69WRccGkQQ3G0gZCdN"
 #seret_key="HhvklAIzJ8sgM0xTdg96QEN1sFIlNTwZ5OyXBfo4LXRbjMPfK9va6t6Js5oTuLFrjJzhlVbGUQ9zNk2y8RgRt9cqCwGjriFDdLQ2dk7DohSBHh5hQ6PhCFirfSCGlp2Fpython "
+
