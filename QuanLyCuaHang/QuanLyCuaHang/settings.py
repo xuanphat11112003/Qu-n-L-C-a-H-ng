@@ -13,7 +13,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 
 import pymysql
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +46,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'oauth2_provider',
     'drf_yasg',
+    'cloudinary',
+    # 'cloudinary_storage',
     # 'corsheaders'
 ]
 REST_FRAMEWORK = {
@@ -53,7 +57,7 @@ REST_FRAMEWORK = {
 
     )
 }
-
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 AUTH_USER_MODEL = 'QuanLyCuaHangSet.User'
 MEDIA_ROOT = '%s/QuanLyCuaHangSet/static/' %BASE_DIR
 
@@ -69,6 +73,13 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
+import cloudinary.api
+
+cloudinary.config(
+    cloud_name="",
+    api_key="",
+    api_secret="",
+)
 ROOT_URLCONF = 'QuanLyCuaHang.urls'
 
 TEMPLATES = [

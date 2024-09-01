@@ -1,5 +1,5 @@
 # myapp/models.py
-
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -77,7 +77,7 @@ class HoaDon(BaseModel):
 # Mô hình sản phẩm
 class SanPham(BaseModel):
 
-    hinh_anh = models.ImageField(upload_to='QuanLySanPhamSet/%Y/%m')
+    hinh_anh = CloudinaryField('image', blank=True, null=True)
     ten_sp = models.CharField(max_length=255)
     loai = models.CharField(max_length=100)
     don_gia = models.DecimalField(max_digits=10, decimal_places=2)
