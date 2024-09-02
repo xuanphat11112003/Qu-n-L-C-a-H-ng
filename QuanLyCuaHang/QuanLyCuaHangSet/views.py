@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from .models import HoaDon, KhachHang, NhanVien, SanPham, HoaDon_SP, User, TichDiemVoucher
-from .serializer import HoaDonSerializer, UserSerializer, SanPhamSerializer, HoaDonSPSerializer
+from .serializer import HoaDonSerializer, UserSerializer, SanPhamSerializer, HoaDonSPSerializer, NhanVienSerializer, \
+    NhanVien_QLSerializer, KhachHangSerializer
 
 
 class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
