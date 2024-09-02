@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
-from .models import HoaDon, KhachHang, NhanVien, SanPham, HoaDon_SP, User, TichDiemVoucher
+from .models import HoaDon, KhachHang, NhanVien, SanPham, HoaDon_SP, User, TichDiemVoucher, NhanVien_QL
 from .serializer import HoaDonSerializer, UserSerializer, SanPhamSerializer, HoaDonSPSerializer, NhanVienSerializer, \
     NhanVien_QLSerializer, KhachHangSerializer
 
@@ -15,10 +15,11 @@ from .serializer import HoaDonSerializer, UserSerializer, SanPhamSerializer, Hoa
 class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
     # permission_classes = [permissions.IsAuthenticated]
 
-     @action(methods=['get', 'patch'], url_path='current-user', detail=False)
-     def get_current_user(self, request):
+    @action(methods=['get', 'patch'], url_path='current-user', detail=False)
+    def get_current_user(self, request):
         user = request.user
 
         if request.method == 'PATCH':
@@ -38,7 +39,7 @@ class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
                         khach_hang_serializer.save()
                     else:
                         return Response(khach_hang_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                
+
                 elif user.user_role == User.UserRole.ROLE_USER:
                     nhan_vien = NhanVien.objects.get(user=user)
                     nhan_vien_serializer = NhanVienSerializer(nhan_vien, data=request.data, partial=True)
@@ -46,7 +47,7 @@ class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
                         nhan_vien_serializer.save()
                     else:
                         return Response(nhan_vien_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                
+
                 elif user.user_role == User.UserRole.ROLE_ADMIN:
                     nhan_vien_ql = NhanVien_QL.objects.get(user=user)
                     nhan_vien_ql_serializer = NhanVien_QLSerializer(nhan_vien_ql, data=request.data, partial=True)
@@ -54,21 +55,22 @@ class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
                         nhan_vien_ql_serializer.save()
                     else:
                         return Response(nhan_vien_ql_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                
+
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(UserSerializer(user).data)
 
+
     def get_serializer_class(self):
-        # Override serializer class if needed
-        return UserSerializer
+    # Override serializer class if needed
+     return UserSerializer
+
 
 class HoaDonViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = HoaDon.objects.all()
     serializer_class = HoaDonSerializer
-
 
     def get_serializer_class(self):
         if self.request.user.is_authenticated:
@@ -147,6 +149,7 @@ class HoaDonViewSet(viewsets.ViewSet, generics.ListAPIView):
         except HoaDon.DoesNotExist:
             return Response({"error": "Hóa đơn không tồn tại"}, status=status.HTTP_404_NOT_FOUND)
 
+
 class StatisticViewSet(viewsets.ViewSet):
     queryset = HoaDon.objects.all()
     serializer_class = HoaDonSerializer
@@ -157,8 +160,10 @@ class StatisticViewSet(viewsets.ViewSet):
         year = self.request.query_params.get('year')
         if month and year:
             queryset = queryset.filter(ngay_lap__year=year, ngay_lap__month=month)
-        queryset = queryset.annotate(month=TruncMonth('ngay_lap')).values('month').annotate(total_revenue=Sum('tong_tien')).order_by('month')
+        queryset = queryset.annotate(month=TruncMonth('ngay_lap')).values('month').annotate(
+            total_revenue=Sum('tong_tien')).order_by('month')
         return queryset
+
 
 class SanPhamViewSet(viewsets.ModelViewSet):
     queryset = SanPham.objects.filter(active=True)
