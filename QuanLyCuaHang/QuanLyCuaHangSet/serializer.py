@@ -1,7 +1,7 @@
 # myapp/serializers.py
 from django.db.models import Sum
 from rest_framework import serializers
-from .models import *
+from .models import HoaDon, HoaDon_SP, KhachHang, NhanVien, User, SanPham, TichDiemVoucher
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,9 +12,14 @@ class UserSerializer(serializers.ModelSerializer):
         user = User(**data)
         user.set_password(user.password)
         user.save()
-        # Tạo KhachHang nếu chưa tồn tại và người dùng là khách hàng
-        if data.get('thanh_vien', False):
+
+        if data.get('user_role') == "ROLE_CUSTOMER":
             KhachHang.objects.get_or_create(user=user)
+
+
+        elif user.user_role == User.UserRole.ROLE_USER:
+
+            NhanVien.objects.get_or_create(user=user, defaults={'gio_lam': 0})
         return user
 
     def get_diem_tich_luy(self, obj):
@@ -36,52 +41,19 @@ class UserSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
+
+
+class HoaDonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HoaDon
+        fields = '__all__'
+
 class HoaDonSPSerializer(serializers.ModelSerializer):
     class Meta:
         model = HoaDon_SP
-        fields = ['id', 'hoa_don', 'san_pham', 'so_luong']
-
-class HoaDonSerializer(serializers.ModelSerializer):
-    chi_tiet = HoaDonSPSerializer(many=True)
-
-    class Meta:
-        model = HoaDon
-        fields = ['id', 'ngay_lap', 'tong_tien', 'ghi_chu', 'khach_hang', 'nhan_vien', 'chi_tiet']
-
-
-    def create(self, validated_data):
-            chi_tiet_data = validated_data.pop('chi_tiet')
-            hoa_don = HoaDon.objects.create(**validated_data)
-
-            # Tạo chi tiết hóa đơn
-            for item in chi_tiet_data:
-                HoaDon_SP.objects.create(hoa_don=hoa_don, **item)
-
-            # Tính toán điểm tích lũy cho khách hàng
-            khach_hang = validated_data['khach_hang']
-            tong_tien = hoa_don.tong_tien
-
-            # 1000 VND = 1 điểm
-            diem_tich_luy = tong_tien // 1000
-
-            # Tạo bản ghi TichDiemVoucher cho khách hàng
-            TichDiemVoucher.objects.create(
-                khach_hang=khach_hang,
-                diem=diem_tich_luy,
-                tong_tien=tong_tien,
-                ngay_lap=hoa_don.ngay_lap
-            )
-
-            return hoa_don
+        fields = '__all__'
 
 class SanPhamSerializer(serializers.ModelSerializer):
     class Meta:
         model = SanPham
         fields = '__all__'
-
-class CommentSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-
-    class Meta:
-        model = Comment
-        fields = ['id', 'content', 'created_date', 'user']
