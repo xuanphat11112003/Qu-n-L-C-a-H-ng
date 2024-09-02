@@ -10,10 +10,10 @@ const CartPage = () => {
     const [products, setProducts] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [showInvoice, setShowInvoice] = useState(false);
-    const [invoiceData, setInvoiceData] = useState({
-        tong_tien: '',
+    const [invoiceData, setInvoiceData] = useState({    
         ghi_chu: '',
-        khach_hang: user.id, // Placeholder ID, should be dynamic based on logged-in user
+        tong_tien: '',
+        khach_hang: 1, // Placeholder ID, should be dynamic based on logged-in user
         nhan_vien: 1,
         chi_tiet: []
     });
@@ -63,17 +63,20 @@ const CartPage = () => {
         }));
 
         setInvoiceData({
-            tong_tien: totalPrice.toFixed(2), // Ensure the total price is formatted correctly
             ghi_chu: '', // Can be updated with user input
-            khach_hang: user.id, // Placeholder customer ID, should be updated based on logged-in user
-            nhan_vien: 1, // Placeholder staff ID, will be set by API
+            tong_tien: totalPrice.toFixed(2), // Ensure the total price is formatted correctly
+            khach_hang: 1, // Placeholder customer ID, should be updated based on logged-in user
+            nhan_vien: 1,
             chi_tiet: invoiceDetails
         });
         setShowInvoice(true);
     };
 
     const handlePostInvoice = async () => {
-        const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');    
+        const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');  
+    
+        
+    
         try {
             const response = await APIs.post(endpoints.createHoaDon, invoiceData, {
                 headers: {
@@ -81,7 +84,7 @@ const CartPage = () => {
                     'Content-Type': 'application/json'  // Đảm bảo kiểu dữ liệu là JSON
                 }
             });
-    
+            console.log("Response from server:", invoiceData);
             const invoiceId = response.data.id; // Lấy ID hóa đơn
     
             // Xóa giỏ hàng và cập nhật trạng thái
@@ -96,10 +99,11 @@ const CartPage = () => {
             // Redirect hoặc hiển thị các tùy chọn thanh toán
             // Example: window.location.href = `/payment?invoiceId=${invoiceId}`;
         } catch (error) {
-            console.error("Error posting invoice:", error);
+            console.error("Error posting invoice:", error.response ? error.response.data : error.message);
             alert('Có lỗi xảy ra khi tạo hóa đơn.');
         }
     };
+    
     
 
     return (

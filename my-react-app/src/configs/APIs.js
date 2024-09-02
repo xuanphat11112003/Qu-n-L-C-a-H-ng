@@ -10,7 +10,7 @@ export const endpoints ={
  'register' :'users/',
  'current-user': 'users/current-user/',
  'login' : 'o/token/',
- 'createHoaDon': 'hoadon/create_hoa_don/'
+ 'createHoaDon': 'hoadon/'
 }
 export default axios.create({
     baseURL: BASE_URL

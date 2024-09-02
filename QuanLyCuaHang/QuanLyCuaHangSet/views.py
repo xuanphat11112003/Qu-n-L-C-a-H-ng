@@ -7,9 +7,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
-from .models import HoaDon, KhachHang, NhanVien, SanPham, HoaDon_SP, User, TichDiemVoucher, NhanVien_QL
-from .serializer import HoaDonSerializer, UserSerializer, SanPhamSerializer, HoaDonSPSerializer, NhanVienSerializer, \
-    NhanVien_QLSerializer, KhachHangSerializer
+from .models import HoaDon, KhachHang, NhanVien, SanPham, HoaDon_SP, User, TichDiemVoucher, NhanVien_QL,Comment
+from .serializer import HoaDonSerializer, UserSerializer, SanPhamSerializer, HoaDonSPSerializer, NhanVienSerializer,NhanVien_QLSerializer, KhachHangSerializer,CommentSerializer
 
 
 class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
@@ -168,7 +167,7 @@ class StatisticViewSet(viewsets.ViewSet):
 class SanPhamViewSet(viewsets.ModelViewSet):
     queryset = SanPham.objects.filter(active=True)
     serializer_class = SanPhamSerializer
-     @action(methods=['get'], url_path='comments', detail=True)
+    @action(methods=['get'], url_path='comments', detail=True)
     def show_comments(self, request, pk=None):
         # Lấy sản phẩm dựa trên pk
         product = self.get_object()

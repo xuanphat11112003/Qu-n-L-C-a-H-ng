@@ -19,7 +19,7 @@ const Register = () => {
             for (let key in user)
                 if (key !== 'confirm')
                     form.append(key, user[key]);  
-            form.append("user_role", "khach_hang");      
+            form.append("user_role", "CUSTOMER");      
             let res = await APIs.post(endpoints['register'], form, {
                 headers: {
                     'Content-Type': 'multipart/form-data'

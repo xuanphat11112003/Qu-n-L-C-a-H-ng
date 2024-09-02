@@ -1,7 +1,7 @@
 # myapp/serializers.py
 from django.db.models import Sum
 from rest_framework import serializers
-from .models import HoaDon, HoaDon_SP, KhachHang, NhanVien, User, SanPham, TichDiemVoucher
+from .models import HoaDon, HoaDon_SP, KhachHang, NhanVien, User, SanPham, TichDiemVoucher, NhanVien_QL, Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -100,3 +100,10 @@ class NhanVien_QLSerializer(serializers.ModelSerializer):
         model = NhanVien_QL
         fields = ['id', 'user', 'phu_cap', 'nghi_phep', 'chuc_vu']
         read_only_fields = ['id']
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'content', 'created_date', 'user']
