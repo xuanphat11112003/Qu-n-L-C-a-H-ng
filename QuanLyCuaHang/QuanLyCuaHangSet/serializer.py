@@ -77,3 +77,26 @@ class SanPhamSerializer(serializers.ModelSerializer):
     class Meta:
         model = SanPham
         fields = '__all__'
+class KhachHangSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = KhachHang
+        fields = ['id', 'user', 'thanh_vien']
+        read_only_fields = ['id']
+
+class NhanVienSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = NhanVien
+        fields = ['id', 'user', 'gio_lam']
+        read_only_fields = ['id']
+
+class NhanVien_QLSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = NhanVien_QL
+        fields = ['id', 'user', 'phu_cap', 'nghi_phep', 'chuc_vu']
+        read_only_fields = ['id']
