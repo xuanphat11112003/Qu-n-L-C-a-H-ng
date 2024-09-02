@@ -1,5 +1,5 @@
 # myapp/models.py
-from cloudinary.models import CloudinaryField
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -13,12 +13,21 @@ class BaseModel(models.Model):
 
 # Mô hình người dùng tùy chỉnh
 class User(AbstractUser):
+    class UserRole(models.TextChoices):
+        ROLE_ADMIN = 'ADMIN', 'Role Admin'
+        ROLE_USER = 'USER', 'Role User'
+        ROLE_CUSTOMER = 'CUSTOMER', 'Role Customer'
+
     ho_ten = models.CharField(max_length=255, blank=True)
     gioi_tinh = models.CharField(max_length=10, blank=True)
     nam_sinh = models.DateField(null=True, blank=True)
     thanh_vien = models.BooleanField(default=False)
     dia_chi = models.TextField()
-    user_role = models.TextField();
+    user_role = models.CharField(
+        max_length=10,
+        choices=UserRole.choices,
+        default=UserRole.ROLE_USER
+    )
 
     def __str__(self):
         return self.username
@@ -26,7 +35,7 @@ class User(AbstractUser):
 # Mô hình khách hàng
 class KhachHang(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    thanh_vien = models.BooleanField(default=False)
+    thanh_vien = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username
@@ -77,7 +86,7 @@ class HoaDon(BaseModel):
 # Mô hình sản phẩm
 class SanPham(BaseModel):
 
-    hinh_anh = CloudinaryField('image', blank=True, null=True)
+    hinh_anh = models.ImageField(upload_to='QuanLySanPhamSet/%Y/%m')
     ten_sp = models.CharField(max_length=255)
     loai = models.CharField(max_length=100)
     don_gia = models.DecimalField(max_digits=10, decimal_places=2)
@@ -117,9 +126,3 @@ class HoaDon_SP(BaseModel):
 
     def __str__(self):
         return f"Hóa đơn {self.hoa_don.ma_hd} - Sản phẩm {self.san_pham.ten_sp}"
-
-
-class Comment(BaseModel):
-    content = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(SanPham, on_delete=models.CASCADE)
