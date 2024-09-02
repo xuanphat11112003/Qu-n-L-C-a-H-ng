@@ -1,5 +1,5 @@
 # myapp/models.py
-
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -86,7 +86,7 @@ class HoaDon(BaseModel):
 # Mô hình sản phẩm
 class SanPham(BaseModel):
 
-    hinh_anh = models.ImageField(upload_to='QuanLySanPhamSet/%Y/%m')
+    hinh_anh = CloudinaryField('image', blank=True, null=True)
     ten_sp = models.CharField(max_length=255)
     loai = models.CharField(max_length=100)
     don_gia = models.DecimalField(max_digits=10, decimal_places=2)
@@ -126,3 +126,8 @@ class HoaDon_SP(BaseModel):
 
     def __str__(self):
         return f"Hóa đơn {self.hoa_don.ma_hd} - Sản phẩm {self.san_pham.ten_sp}"
+
+class Comment(BaseModel):
+    content = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(SanPham, on_delete=models.CASCADE)
