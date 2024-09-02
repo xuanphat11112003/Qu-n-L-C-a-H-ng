@@ -13,13 +13,33 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(user.password)
         user.save()
 
-        if data.get('user_role') == "ROLE_CUSTOMER":
+    def create(self, validated_data):
+        # Tách password ra khỏi validated_data để xử lý đặc biệt
+        password = validated_data.pop('password')
+
+        # Tạo instance User từ validated_data
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+
+        # Kiểm tra vai trò của user để tạo KhachHang, NhanVien hoặc NhanVien_QL tương ứng
+        if user.user_role == User.UserRole.ROLE_CUSTOMER:
+            # Tạo KhachHang nếu vai trò là ROLE_CUSTOMER
             KhachHang.objects.get_or_create(user=user)
-
-
         elif user.user_role == User.UserRole.ROLE_USER:
+            # Tạo NhanVien nếu vai trò là ROLE_USER
+            NhanVien.objects.get_or_create(user=user, defaults={'gio_lam': 0})  # Thiết lập giá trị mặc định cho 'gio_lam'
+        elif user.user_role == User.UserRole.ROLE_ADMIN:
+            # Tạo NhanVien_QL nếu vai trò là ROLE_ADMIN
+            NhanVien_QL.objects.get_or_create(
+                user=user,
+                defaults={
+                    'phu_cap': 0,
+                    'nghi_phep': 0,
+                    'chuc_vu': 'Quản lý'
+                }
+            )
 
-            NhanVien.objects.get_or_create(user=user, defaults={'gio_lam': 0})
         return user
 
     def get_diem_tich_luy(self, obj):
