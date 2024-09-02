@@ -16,7 +16,7 @@ const Footer = () => {
         <Row>
           {/* Logo và mô tả */}
           <Col md={3} className="footer-logo">
-            <img src="/icon/bus.png" alt="Logo" className="footer-logo-img" />
+            <img src="https://img.freepik.com/premium-vector/coffee-cup-vector-logo-design-template-premium-coffee-shop-logo_720103-917.jpg" alt="Logo" className="footer-logo-img" />
             <p className="footer-description">
               Chúng tôi cung cấp các giải pháp công nghệ tiên tiến để phát triển doanh nghiệp của bạn.
             </p>

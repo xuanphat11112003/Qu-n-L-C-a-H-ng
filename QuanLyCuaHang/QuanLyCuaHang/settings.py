@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'cloudinary',
     # 'cloudinary_storage',
-    # 'corsheaders'
+    'corsheaders'
 ]
 REST_FRAMEWORK = {
 
@@ -75,10 +75,11 @@ MIDDLEWARE = [
 
 import cloudinary.api
 
+
 cloudinary.config(
-    cloud_name="",
-    api_key="",
-    api_secret="",
+    cloud_name="dzfnj3hdq",
+    api_key="317433643875488",
+    api_secret="qMEUk2ZF3wBWLU4qTTh47HaQe90"
 )
 ROOT_URLCONF = 'QuanLyCuaHang.urls'
 

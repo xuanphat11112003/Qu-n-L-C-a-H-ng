@@ -14,12 +14,22 @@ const Header =() =>{
         <>
         <Navbar collapseOnSelect expand="lg" className="custom-navbar">
         <Container>
-            <Navbar.Brand href="#h/">Cafe 3ANHEM</Navbar.Brand>
+            <Navbar.Brand href="#h/"style={{ color: 'white' }}>
+            <img src={"https://img.freepik.com/premium-vector/coffee-cup-vector-logo-design-te  mplate-premium-coffee-shop-logo_720103-917.jpg"} width="30" height="30" roundedCircle />
+            Coffee 3ANHEM</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-                <Link className='nav-link' to="/">Trang chủ</Link>
-              
+                <Link className='nav-link' to="/">Trang chủ
+                </Link>
+                {user===null?<>
+                                                         
+                    </>:<>
+                    <Link className='nav-link' to="/giohang">Giỏ hàng
+                        <Image src={"https://e7.pngegg.com/pngimages/81/559/png-clipart-shopping-cart-software-computer-icons-shopping-cart-text-retail-thumbnail.png"} width="30" height="30" roundedCircle />
+                    </Link>
+                         
+                    </>}
                              
             </Nav>
             <Nav>
@@ -28,7 +38,7 @@ const Header =() =>{
                         <Link className='nav-link text-success' to="/register"> Đăng ký</Link>                                   
                     </>:<>
                          <Link className='nav-link text-success' to="/login">
-                         <Image src={user.avatar} width="30" height="30" roundedCircle />
+                         <Image src={"https://img.freepik.com/free-vector/user-circles-set_78370-4704.jpg?size=626&ext=jpg"} width="30" height="30" roundedCircle />
                               {user.first_name}!</Link>
                               <Button variant='danger' onClick={handleLogout}>Đăng xuất</Button>
                     </>}

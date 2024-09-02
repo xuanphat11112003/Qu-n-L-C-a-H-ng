@@ -1,13 +1,13 @@
 .custom-navbar {
-    background: linear-gradient(45deg, #87f5ef, #77c0f0); /* Màu gradient từ hồng đến cam */
+    background: linear-gradient(45deg, #4e2e08, #925b13); /* Màu gradient từ hồng đến cam */
   }
   
   .custom-navbar .nav-link {
-    color: rgb(0, 0, 0); /* Màu văn bản của liên kết */
+    color: rgb(255, 255, 255); /* Màu văn bản của liên kết */
   }
   
   .custom-navbar .nav-link:hover {
-    color: #fff; /* Màu văn bản khi hover */
+    color: #ffffff; /* Màu văn bản khi hover */
   }
   
   .custom-navbar .btn-danger {
