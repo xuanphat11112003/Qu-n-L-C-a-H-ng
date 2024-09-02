@@ -34,7 +34,7 @@ class User(AbstractUser):
 
 # Mô hình khách hàng
 class KhachHang(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User,related_name="khach_hang", on_delete=models.CASCADE,primary_key=True)
     thanh_vien = models.BooleanField(default=True)
 
     def __str__(self):
@@ -42,7 +42,7 @@ class KhachHang(models.Model):
 
 # Mô hình nhân viên
 class NhanVien(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="nhan_vien",primary_key=True)
     gio_lam = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
@@ -50,7 +50,7 @@ class NhanVien(models.Model):
 
 # Mô hình nhân viên QL
 class NhanVien_QL(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="quan_ly",primary_key=True)
     phu_cap = models.DecimalField(max_digits=10, decimal_places=2)
     nghi_phep = models.IntegerField()
     chuc_vu = models.CharField(max_length=100)
