@@ -80,7 +80,7 @@ class HoaDonViewSet(viewsets.ViewSet, generics.ListAPIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-         @action(methods=['post'], detail=False)
+    @action(methods=['post'], detail=False)
     def create_hoa_don_khach_hang(self, request):
         user = request.user
 
