@@ -80,6 +80,51 @@ class HoaDonViewSet(viewsets.ViewSet, generics.ListAPIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+         @action(methods=['post'], detail=False)
+    def create_hoa_don_khach_hang(self, request):
+        user = request.user
+
+        try:
+            # Tìm kiếm khách hàng dựa vào user hiện tại
+            khach_hang = KhachHang.objects.get(user=user)
+        except KhachHang.DoesNotExist:
+            return Response({"error": "User này không phải là khách hàng"}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['khach_hang'] = khach_hang.id  # Gán khách hàng từ request.user
+
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            with transaction.atomic():  # Đảm bảo rằng mọi thao tác dưới đây đều hoàn tất hoặc không có gì thay đổi
+                hoa_don = serializer.save()
+
+                # Xử lý logic tạo chi tiết hóa đơn
+                chi_tiet_data = request.data.get('chi_tiet', [])
+                for item in chi_tiet_data:
+                    item['hoa_don'] = hoa_don.id
+                    chi_tiet_serializer = HoaDonSPSerializer(data=item)
+                    if chi_tiet_serializer.is_valid():
+                        chi_tiet_serializer.save()
+                    else:
+                        return Response(chi_tiet_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+                # Tính toán điểm tích lũy cho khách hàng
+                tong_tien = hoa_don.tong_tien
+
+                # 1000 VND = 1 điểm
+                diem_tich_luy = tong_tien // 1000
+
+                # Tạo bản ghi TichDiemVoucher cho khách hàng
+                TichDiemVoucher.objects.create(
+                    khach_hang=khach_hang,
+                    diem=diem_tich_luy,
+                    tong_tien=tong_tien,
+                    ngay_lap=hoa_don.ngay_lap
+                )
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['put'], detail=True)
     def update_partial(self, request, pk=None):
