@@ -1,5 +1,6 @@
 # myapp/models.py
 from cloudinary.models import CloudinaryField
+from django import forms
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -131,3 +132,13 @@ class Comment(BaseModel):
     content = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(SanPham, on_delete=models.CASCADE)
+
+
+class PaymentForm(forms.Form):
+
+    order_id = forms.CharField(max_length=250)
+    order_type = forms.CharField(max_length=20)
+    amount = forms.IntegerField()
+    order_desc = forms.CharField(max_length=100)
+    bank_code = forms.CharField(max_length=20, required=False)
+    language = forms.CharField(max_length=2)

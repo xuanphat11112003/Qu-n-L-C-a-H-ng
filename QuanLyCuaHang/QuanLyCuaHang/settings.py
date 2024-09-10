@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 import pymysql
@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-hb(b#mo*5fl0i6u!-s-076w(^n2f)sy2e-ugl*g@x1v6vt*wcl
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['192.168.2.8']  # '192.168.1.16','127.0.0.1'
+ALLOWED_HOSTS = []  # '192.168.1.16','127.0.0.1'
 
 
 
@@ -113,7 +113,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'qlchdb',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': 'chithien26@',
         'HOST': 'localhost'
     }
 }
@@ -166,3 +166,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #clien_id="fMuwNy8e0Sftnb3QfdYzTT69WRccGkQQ3G0gZCdN"
 #seret_key="HhvklAIzJ8sgM0xTdg96QEN1sFIlNTwZ5OyXBfo4LXRbjMPfK9va6t6Js5oTuLFrjJzhlVbGUQ9zNk2y8RgRt9cqCwGjriFDdLQ2dk7DohSBHh5hQ6PhCFirfSCGlp2Fpython "
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static/'),
+)
+STATIC_URL = '/static/'
+# VNPAY CONFIG
+VNPAY_RETURN_URL = 'http://localhost:8000/payment_return'  # get from config
+VNPAY_PAYMENT_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'  # get from config
+VNPAY_API_URL = 'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction'
+VNPAY_TMN_CODE = 'XPWN3D7V'  # Website ID in VNPAY System, get from config
+VNPAY_HASH_SECRET_KEY = 'PCTCLHAG99HNWWO7RZQEYH946MOGKZOR'  # Secret key for create checksum,get from config
