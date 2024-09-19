@@ -11,7 +11,7 @@ router.register('statistic', views.StatisticViewSet, basename='statistic')
 router.register('hoadon', views.HoaDonViewSet, basename='hoadon')
 router.register('sanpham', SanPhamViewSet, basename ='sanpham')
 router.register('comments', views.CommentViewSet, basename='comments')
-
+router.register('diachigiaohang', views.CommentViewSet, basename='diachigiaohang')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

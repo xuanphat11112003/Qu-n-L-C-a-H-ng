@@ -28,7 +28,9 @@ const Header =() =>{
                     <Link className='nav-link' to="/giohang">Giỏ hàng
                         <Image src={"https://e7.pngegg.com/pngimages/81/559/png-clipart-shopping-cart-software-computer-icons-shopping-cart-text-retail-thumbnail.png"} width="30" height="30" roundedCircle />
                     </Link>
-                         
+                    <Link className='nav-link' to="/donhang">Đơn hàng
+                       
+                    </Link>
                     </>}
                              
             </Nav>

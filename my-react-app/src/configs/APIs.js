@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export const BASE_URL= 'http://192.168.2.8:8000/'
+export const BASE_URL= 'http://192.168.0.104:8000/'
 
 export const endpoints ={
  'chitietsanpham': (id) => `sanpham/${id}/`,
@@ -10,7 +10,8 @@ export const endpoints ={
  'register' :'users/',
  'current-user': 'users/current-user/',
  'login' : 'o/token/',
- 'createHoaDon': 'hoadon/'
+ 'createHoaDon': 'hoadon/',
+ 'donhang': (id) => `hoadon/user-invoices/${id}/`,
 }
 export default axios.create({
     baseURL: BASE_URL

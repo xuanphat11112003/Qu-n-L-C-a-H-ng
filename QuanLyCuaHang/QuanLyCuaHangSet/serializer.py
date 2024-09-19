@@ -1,8 +1,7 @@
 # myapp/serializers.py
 from django.db.models import Sum
 from rest_framework import serializers
-from .models import HoaDon, HoaDon_SP, KhachHang, NhanVien, User, SanPham, TichDiemVoucher, NhanVien_QL, Comment
-
+from .models import HoaDon, HoaDon_SP, KhachHang, NhanVien, User, SanPham, TichDiemVoucher, NhanVien_QL, Comment,DiaChiGiaoHang
 
 class UserSerializer(serializers.ModelSerializer):
     diem_tich_luy = serializers.SerializerMethodField()
@@ -107,3 +106,9 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'content', 'created_date', 'user']
+class DiaChiGiaoHangSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = DiaChiGiaoHang
+        fields = ['id', 'ho_ten', 'so_dien_thoai', 'dia_chi', 'mac_dinh']
+        read_only_fields = ['user']

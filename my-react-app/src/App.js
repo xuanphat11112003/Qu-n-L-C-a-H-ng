@@ -15,6 +15,7 @@ import MyUserReducer from './reducers/MyUserReducer';
 import Register from './components/Register';
 import ChiTietSanPham from './components/ChiTietSanPham';
 import GioHang from './components/GioHang';
+import DonHang from './components/DonHang';
 
 
 
@@ -82,6 +83,7 @@ const App = () =>{
                 <Route path='/register' element={<Register/>} />
                 <Route path="/sanpham/chitietsanpham" element={<ChiTietSanPham />} />
                 <Route path='/giohang' element={<GioHang/>} />
+                <Route path='/donhang' element={<DonHang/>} />
               </Routes>
             </Container>
             <Footer/>

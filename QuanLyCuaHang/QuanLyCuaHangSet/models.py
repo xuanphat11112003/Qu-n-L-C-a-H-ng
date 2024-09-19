@@ -74,12 +74,24 @@ class TichDiemVoucher(BaseModel):
 
 # Mô hình hóa đơn
 class HoaDon(BaseModel):
+    TRANG_THAI_CHOICES = [
+        ('prep', 'Đang chuẩn bị'),
+        ('deliv', 'Đang giao hàng'),
+        ('del', 'Giao thành công'),
+    ]
+
+    PHUONG_THUC_THANH_TOAN_CHOICES = [
+        ('transfer', 'Chuyển khoản'),
+        ('cash', 'Tiền mặt'),
+    ]
 
     ngay_lap = models.DateTimeField(auto_now_add=True)
     tong_tien = models.DecimalField(max_digits=10, decimal_places=2)
     ghi_chu = models.TextField(blank=True)
     khach_hang = models.ForeignKey(KhachHang, on_delete=models.CASCADE)
     nhan_vien = models.ForeignKey(NhanVien, on_delete=models.CASCADE)
+    trang_thai = models.CharField(max_length=10, choices=TRANG_THAI_CHOICES, default='prep')
+    phuong_thuc_thanh_toan = models.CharField(max_length=10, choices=PHUONG_THUC_THANH_TOAN_CHOICES, default='cash')
 
     def __str__(self):
         return f"Hóa đơn {self.id} - {self.ngay_lap}"
@@ -142,3 +154,22 @@ class PaymentForm(forms.Form):
     order_desc = forms.CharField(max_length=100)
     bank_code = forms.CharField(max_length=20, required=False)
     language = forms.CharField(max_length=2)
+
+from django.db import models
+
+# Mô hình địa chỉ giao hàng
+class DiaChiGiaoHang(BaseModel):
+    khach_hang = models.ForeignKey(KhachHang, on_delete=models.CASCADE, related_name='dia_chi_giao_hang')
+    ho_ten = models.CharField(max_length=255)
+    so_dien_thoai = models.CharField(max_length=15)
+    dia_chi = models.TextField()
+    mac_dinh = models.BooleanField(default=False)  # Địa chỉ mặc định
+
+    def save(self, *args, **kwargs):
+        # Nếu địa chỉ này được chọn làm mặc định, phải bỏ mặc định các địa chỉ khác
+        if self.mac_dinh:
+            DiaChiGiaoHang.objects.filter(khach_hang=self.khach_hang, mac_dinh=True).update(mac_dinh=False)
+        super(DiaChiGiaoHang, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Địa chỉ giao hàng của {self.khach_hang.user.username}"

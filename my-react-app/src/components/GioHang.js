@@ -65,7 +65,7 @@ const CartPage = () => {
         setInvoiceData({
             ghi_chu: '', // Can be updated with user input
             tong_tien: totalPrice.toFixed(2), // Ensure the total price is formatted correctly
-            khach_hang: 1, // Placeholder customer ID, should be updated based on logged-in user
+            khach_hang: user.id, // Placeholder customer ID, should be updated based on logged-in user
             nhan_vien: 1,
             chi_tiet: invoiceDetails
         });
@@ -76,7 +76,7 @@ const CartPage = () => {
         const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');  
     
         
-    
+        console.log("Response from server:", invoiceData);
         try {
             const response = await APIs.post(endpoints.createHoaDon, invoiceData, {
                 headers: {
@@ -84,7 +84,7 @@ const CartPage = () => {
                     'Content-Type': 'application/json'  // Đảm bảo kiểu dữ liệu là JSON
                 }
             });
-            console.log("Response from server:", invoiceData);
+            
             const invoiceId = response.data.id; // Lấy ID hóa đơn
     
             // Xóa giỏ hàng và cập nhật trạng thái
@@ -200,7 +200,10 @@ const CartPage = () => {
                         Đóng
                     </Button>
                     <Button variant="primary" onClick={handlePostInvoice}>
-                        Thanh toán
+                        Tiền mặt
+                    </Button>
+                    <Button variant="primary" onClick={handlePostInvoice}>
+                        VnPay
                     </Button>
                 </Modal.Footer>
             </Modal>

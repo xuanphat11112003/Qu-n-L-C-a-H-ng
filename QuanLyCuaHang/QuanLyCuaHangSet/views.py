@@ -7,8 +7,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
-from .models import HoaDon, KhachHang, NhanVien, SanPham, HoaDon_SP, User, TichDiemVoucher, NhanVien_QL,Comment
-from .serializer import HoaDonSerializer, UserSerializer, SanPhamSerializer, HoaDonSPSerializer, NhanVienSerializer,NhanVien_QLSerializer, KhachHangSerializer,CommentSerializer
+from .models import HoaDon, KhachHang, NhanVien, SanPham, HoaDon_SP, User, TichDiemVoucher, NhanVien_QL,Comment, DiaChiGiaoHang
+from .serializer import HoaDonSerializer, UserSerializer, SanPhamSerializer, HoaDonSPSerializer, NhanVienSerializer,NhanVien_QLSerializer, KhachHangSerializer,CommentSerializer, DiaChiGiaoHangSerializer
 
 import hashlib
 import hmac
@@ -88,7 +88,29 @@ class UserViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
 class HoaDonViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = HoaDon.objects.all()
     serializer_class = HoaDonSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
+    @action(detail=False, methods=['get'], url_path='user-invoices/(?P<user_id>[^/.]+)')
+    def user_invoices(self, request, user_id=None):
+        """
+        API để lấy danh sách hóa đơn của một user cụ thể dựa trên user_id
+        """
+        try:
+            # Lấy danh sách hóa đơn dựa trên user_id
+            hoa_don_queryset = HoaDon.objects.filter(khach_hang__user_id=user_id)
+
+            # Nếu không tìm thấy hóa đơn nào
+            if not hoa_don_queryset.exists():
+                return Response({"message": "Không có hóa đơn nào cho user_id này."}, status=404)
+
+            # Serialize dữ liệu hóa đơn
+            serializer = HoaDonSerializer(hoa_don_queryset, many=True, context={'request': request})
+
+            # Trả về danh sách hóa đơn
+            return Response(serializer.data, status=200)
+
+        except KhachHang.DoesNotExist:
+            return Response({"error": "Khách hàng không tồn tại"}, status=404)
     def get_serializer_class(self):
         if self.request.user.is_authenticated:
             return None;
@@ -115,8 +137,8 @@ class HoaDonViewSet(viewsets.ViewSet, generics.ListAPIView):
         products = data.get('products', [])  # List of products
 
         # Fetch KhachHang and NhanVien instances
-        khach_hang = KhachHang.objects.get(id=data.get("khach_hang"))
-        nhan_vien = NhanVien.objects.get(id=data.get("nhan_vien"))
+        khach_hang = KhachHang.objects.get(user_id=data.get("khach_hang"))
+        nhan_vien = NhanVien.objects.get(user_id=data.get("nhan_vien"))
 
         # Create HoaDon object
         hoa_don_data = {
@@ -124,6 +146,8 @@ class HoaDonViewSet(viewsets.ViewSet, generics.ListAPIView):
             "tong_tien": data.get("tong_tien", 0),
             "khach_hang": khach_hang,  # Use the fetched instance
             "nhan_vien": nhan_vien,  # Use the fetched instance
+            "phuong_thuc_thanh_toan": data.get("phuong_thuc_thanh_toan", "cash"),
+            "trang_thai": data.get("trang_thai", "prep"),
         }
 
         hoa_don = HoaDon.objects.create(**hoa_don_data)
@@ -475,4 +499,14 @@ def refund(request):
         response_json = {"error": f"Request failed with status code: {response.status_code}"}
 
     return render(request, "payment/refund.html", {"title": "Kết quả hoàn tiền giao dịch", "response_json": response_json})
+class DiaChiGiaoHangListCreateView(generics.ListCreateAPIView):
+    serializer_class = DiaChiGiaoHangSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        # Lấy danh sách địa chỉ giao hàng của khách hàng đang đăng nhập
+        return DiaChiGiaoHang.objects.filter(khach_hang=self.request.user.khach_hang)
+
+    def perform_create(self, serializer):
+        # Gán khách hàng đang đăng nhập cho địa chỉ mới
+        serializer.save(khach_hang=self.request.user.khach_hang)
